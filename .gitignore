@@ -1,0 +1,18 @@
+*.iml
+.gradle
+/local.properties
+.idea/
+.kotlin/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Firebase config (contains project-specific API key) — never commit
+app/google-services.json
+
+# Keystores / signing
+*.jks
+*.keystore

@@ -1,0 +1,7 @@
+## Copy this file to "local.properties" and fill in your own values.
+## local.properties is git-ignored and must NEVER be committed.
+
+sdk.dir=/path/to/your/Android/Sdk
+
+## Get your key from https://console.anthropic.com/
+CLAUDE_API_KEY=your-anthropic-api-key-here

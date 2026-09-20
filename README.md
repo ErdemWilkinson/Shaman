@@ -1,97 +1,95 @@
-# Shaman — Yapay Zeka Destekli Mobil Sağlık Ön Değerlendirme Uygulaması
+# Shaman — AI-Powered Mobile Health Pre-Assessment App
 
-Shaman, kullanıcıların semptomlarını girerek olası hastalıkları ihtimal yüzdeleriyle görebildiği,
-Anthropic Claude yapay zeka modeliyle çalışan bir Android sağlık ön değerlendirme uygulamasıdır.
-Bu proje, Karadeniz Teknik Üniversitesi Trabzon Meslek Yüksekokulu Bilgisayar Programcılığı
-Programı bitirme projesi olarak geliştirilmiştir.
+Shaman is an Android health pre-assessment application, powered by the Anthropic Claude AI
+model, that lets users enter their symptoms and see possible conditions along with probability
+percentages. This project was developed as a graduation project for the Computer Programming
+Program at Karadeniz Technical University, Trabzon Vocational School.
 
-> ⚠️ **Uyarı:** Shaman bir doktor teşhisinin veya klinik muayenenin yerini almaz. Yalnızca
-> bireyin doktora gitmeden önce bilinçli bir ön değerlendirme yapmasına yardımcı olan bir
-> bilgilendirme aracıdır.
+> ⚠️ **Warning:** Shaman is not a substitute for a doctor's diagnosis or a clinical examination.
+> It is only an informational tool that helps individuals make an informed pre-assessment before
+> seeing a doctor.
 
-Projenin tam akademik raporuna [`docs/Shaman-Proje-Raporu.pdf`](docs/Shaman-Proje-Raporu.pdf)
-dosyasından ulaşabilirsiniz.
+The project's full academic report is available in
+[`docs/Shaman-Proje-Raporu.pdf`](docs/Shaman-Proje-Raporu.pdf).
 
-## Özellikler
+## Features
 
-- **Semptom Akışı:** Vücut bölgesi, semptomlar, şikayet süresi, şiddet, aile geçmişi ve yaşam
-  tarzı bilgilerini toplayan altı adımlı dinamik soru akışı.
-- **Yapay Zeka Analizi:** Toplanan bilgiler Anthropic Claude API'sine gönderilerek olası
-  hastalıklar, halk arasında kullanılan Türkçe isimleriyle ve ihtimal yüzdeleriyle listelenir.
-- **Hastalık Detayları:** Seçilen hastalık için nedenleri, belirtileri, tedavi önerileri ve
-  ne zaman doktora gidilmesi gerektiğini özetleyen detay ekranı.
-- **Kullanıcı Hesapları:** Firebase Authentication ile e-posta/şifre tabanlı kayıt ve giriş.
-- **Geçmiş Analizler:** Cloud Firestore üzerinde kullanıcıya özel olarak saklanan analiz geçmişi.
+- **Symptom Flow:** A six-step dynamic questionnaire that collects information on body region,
+  symptoms, complaint duration, severity, family history, and lifestyle.
+- **AI Analysis:** The collected information is sent to the Anthropic Claude API, which returns a
+  list of possible conditions with their commonly used Turkish names and probability percentages.
+- **Condition Details:** A detail screen for the selected condition summarizing its causes,
+  symptoms, treatment suggestions, and when to see a doctor.
+- **User Accounts:** Email/password-based registration and login via Firebase Authentication.
+- **Analysis History:** Analysis history stored per user in Cloud Firestore.
 
-## Kullanılan Teknolojiler
+## Technologies Used
 
-| Katman              | Teknoloji                                   |
-|---------------------|----------------------------------------------|
-| Dil                 | Kotlin                                        |
-| Arayüz              | Jetpack Compose, Navigation Compose           |
-| Kimlik Doğrulama    | Firebase Authentication                       |
-| Veritabanı          | Cloud Firestore (NoSQL)                       |
-| Ağ Katmanı          | Retrofit, OkHttp                              |
-| Yapay Zeka          | Anthropic Claude API (`claude-haiku-4-5`)     |
+| Layer                | Technology                                    |
+|---------------------|------------------------------------------------|
+| Language             | Kotlin                                        |
+| UI                   | Jetpack Compose, Navigation Compose           |
+| Authentication       | Firebase Authentication                       |
+| Database             | Cloud Firestore (NoSQL)                       |
+| Networking            | Retrofit, OkHttp                              |
+| AI                    | Anthropic Claude API (`claude-haiku-4-5`)     |
 
-## Mimari
+## Architecture
 
 ```
 app/src/main/java/
-├── com/erdem/shaman/          # MainActivity, tema
+├── com/erdem/shaman/          # MainActivity, theme
 ├── network/                   # ClaudeApi, ClaudeRepository, ClaudeRequest
 └── ui/
     ├── navigation/             # AppNavigation
     └── screens/                 # Login, Register, SymptomFlow, Result, DiseaseDetail, Profile
 ```
 
-- **Kullanıcı arayüzü katmanı:** Jetpack Compose ile yazılan ekranlar, Navigation Compose ile
-  yönetilen geçişler.
-- **Veri katmanı:** Firebase Authentication (kimlik doğrulama) ve Cloud Firestore
-  (`users/{userId}/history` alt koleksiyon yapısı ile analiz geçmişi).
-- **Yapay zeka entegrasyon katmanı:** Retrofit/OkHttp üzerinden Claude API çağrıları;
-  API anahtarı ve zorunlu başlıklar bir OkHttp interceptor ile isteklere eklenir.
+- **UI layer:** Screens written with Jetpack Compose, with transitions managed by
+  Navigation Compose.
+- **Data layer:** Firebase Authentication (authentication) and Cloud Firestore (analysis history
+  stored under the `users/{userId}/history` subcollection structure).
+- **AI integration layer:** Claude API calls via Retrofit/OkHttp; the API key and required
+  headers are added to requests through an OkHttp interceptor.
 
-## Kurulum
+## Setup
 
-Bu depo, güvenlik nedeniyle hiçbir API anahtarı veya Firebase yapılandırması **içermez**.
-Uygulamayı kendi ortamınızda çalıştırmak için aşağıdaki adımları izlemeniz gerekir.
+For security reasons, this repository **does not include** any API keys or Firebase
+configuration. To run the app in your own environment, follow the steps below.
 
-### 1. Depoyu klonlayın
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/ErdemWilkinson/Shaman.git
 cd Shaman
 ```
 
-### 2. Firebase yapılandırması
+### 2. Firebase configuration
 
-1. [Firebase Console](https://console.firebase.google.com/) üzerinde yeni bir proje oluşturun.
-2. Projeye `com.erdem.shaman` paket adıyla bir Android uygulaması ekleyin.
-3. Authentication (E-posta/Şifre) ve Cloud Firestore servislerini etkinleştirin.
-4. İndirilen `google-services.json` dosyasını `app/` klasörüne kopyalayın
-   (şablon için [`app/google-services.json.example`](app/google-services.json.example)
-   dosyasına bakabilirsiniz).
+1. Create a new project in the [Firebase Console](https://console.firebase.google.com/).
+2. Add an Android app to the project with the package name `com.erdem.shaman`.
+3. Enable the Authentication (Email/Password) and Cloud Firestore services.
+4. Copy the downloaded `google-services.json` file into the `app/` folder (see
+   [`app/google-services.json.example`](app/google-services.json.example) for a template).
 
-### 3. Claude API anahtarı
+### 3. Claude API key
 
-1. [Anthropic Console](https://console.anthropic.com/) üzerinden bir API anahtarı oluşturun.
-2. Proje kök dizinindeki [`local.properties.example`](local.properties.example) dosyasını
-   `local.properties` olarak kopyalayın ve `CLAUDE_API_KEY` değerini kendi anahtarınızla
-   doldurun:
+1. Create an API key via the [Anthropic Console](https://console.anthropic.com/).
+2. Copy the [`local.properties.example`](local.properties.example) file in the project root to
+   `local.properties` and fill in the `CLAUDE_API_KEY` value with your own key:
 
    ```properties
    sdk.dir=/path/to/Android/Sdk
    CLAUDE_API_KEY=your-anthropic-api-key-here
    ```
 
-   `local.properties` git tarafından takip edilmez; anahtarınız yalnızca yerel makinenizde
-   kalır ve derleme sırasında `BuildConfig.CLAUDE_API_KEY` olarak koda enjekte edilir.
+   `local.properties` is not tracked by git; your key stays only on your local machine and is
+   injected into the code as `BuildConfig.CLAUDE_API_KEY` at build time.
 
-### 4. Firestore güvenlik kuralları
+### 4. Firestore security rules
 
-Kullanıcıların yalnızca kendi verilerine erişebilmesi için Firestore güvenlik kurallarını
-aşağıdaki gibi ayarlamanız önerilir:
+To ensure users can only access their own data, it is recommended to set your Firestore
+security rules as follows:
 
 ```
 rules_version = '2';
@@ -107,24 +105,24 @@ service cloud.firestore {
 }
 ```
 
-### 5. Uygulamayı çalıştırın
+### 5. Run the app
 
-Android Studio ile projeyi açıp bir emülatör veya fiziksel cihaz üzerinde çalıştırabilir,
-ya da komut satırından derleyebilirsiniz:
+You can open the project in Android Studio and run it on an emulator or physical device, or
+build it from the command line:
 
 ```bash
 ./gradlew assembleDebug
 ```
 
-## Güvenlik Notları
+## Security Notes
 
-- Bu depoda **hiçbir gerçek API anahtarı veya Firebase kimlik bilgisi bulunmamaktadır.**
-- API anahtarları yalnızca `local.properties` (git tarafından yok sayılır) üzerinden
-  `BuildConfig` aracılığıyla uygulamaya dahil edilir.
-- Üretim ortamı için API anahtarlarının doğrudan mobil istemcide tutulması yerine bir
-  arka uç (backend) proxy üzerinden yönetilmesi önerilir.
+- This repository **contains no real API keys or Firebase credentials.**
+- API keys are included in the app only via `local.properties` (ignored by git) through
+  `BuildConfig`.
+- For a production environment, it is recommended that API keys be managed through a backend
+  proxy rather than kept directly in the mobile client.
 
-## Lisans
+## License
 
-Bu proje akademik bir bitirme projesi olarak geliştirilmiştir. Kullanım koşulları için
-depo sahibiyle iletişime geçiniz.
+This project was developed as an academic graduation project. Please contact the repository
+owner regarding terms of use.
